@@ -774,3 +774,6 @@ Temporary Items
 # https://plugins.jetbrains.com/plugin/12206-codestream
 
 # End of https://www.toptal.com/developers/gitignore/api/python,flask,react,reactnative,pycharm,webstorm,clion
+
+## Database files
+*.db
