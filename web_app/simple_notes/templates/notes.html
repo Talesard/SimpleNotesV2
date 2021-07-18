@@ -1,13 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Notes</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
     <h1>Notes</h1>
     <ul>
         {% if notes is not none %}
@@ -17,10 +10,11 @@
         {% endif %}
     </ul>
 
-    <form action="/add_note" method="POST">
+    <button onclick="document.getElementById('add_note_form').style='display: block;'; document.getElementById('add_bt').style='display: none;'" id="add_bt">New</button>
+    <form action="{{url_for('add_note')}}" method="POST" style="display: none;" id="add_note_form">
         <input type="text" placeholder="Title" name="title"> <br>
         <textarea name="details" id="" cols="30" rows="10" placeholder="Details"></textarea> <br>
         <input type="submit">
+        <button type="button" onclick="document.getElementById('add_note_form').style='display: none;'; document.getElementById('add_bt').style='display: block;'">Сancel</button>
     </form>
-</body>
-</html>
+{% endblock %}

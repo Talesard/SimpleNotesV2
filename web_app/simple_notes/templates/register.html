@@ -1,20 +1,28 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Register</title>
-</head>
-<body>
-<h1>Register</h1>
-<form action="/register", method="POST">
-    <input type="text" name="username" placeholder="username"> <br>
-    <input type="text" name="email" placeholder="email"> <br>
-    <input type="password" name="password" placeholder="password"> <br>
-    <input type="password" name="password_2" placeholder="password again"> <br>
-    <input type="submit" value="Register">
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form action="{{url_for('register')}}" method="POST"  class="block-login" >
+    <div class="form-group">
+        <label for="username-input">Username</label>
+        <input type="text" name="username" class="form-control" id="username-input" placeholder="Username">
+    </div>
+    <div class="form-group">
+        <label for="email-input">Email</label>
+        <input type="email" name="email" class="form-control" id="email-input" placeholder="Email">
+    </div>
+    <div class="form-group">
+        <label for="password-input">Password</label>
+        <input type="password" name="password" class="form-control" id="password-input" placeholder="Password">
+    </div>
+    <div class="form-group">
+        <label for="password-input-2">Confirm Password</label>
+        <input type="password" name="password_2" class="form-control" id="password-input-2" placeholder="Confirm Password">
+    </div>
+    <div style="text-align: center; margin-top: 10px">
+        <button type="submit" class="btn btn-primary" style="width: 100%">Submit</button>
+        <a href="{{ url_for('login') }}">Sign in</a>
+    </div>
 </form>
-</body>
-</html>
+
+{% endblock %}
