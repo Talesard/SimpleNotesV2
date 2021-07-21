@@ -110,8 +110,7 @@ def secret():
 @app.route('/', methods=['GET'])
 @login_required
 def notes():
-    curr_user_id = Users.query.filter_by(id=current_user.id).first().id
-    curr_user_notes = Notes.query.filter_by(user_id=curr_user_id).order_by(Notes.date_creat.desc()).all()
+    curr_user_notes = Notes.query.filter_by(user_id=current_user.id).order_by(Notes.date_creat.desc()).all()
     return render_template('notes.html', notes=curr_user_notes)
 
 
@@ -120,9 +119,8 @@ def notes():
 def add_note():
     title = request.form['title']
     details = request.form['details']
-    curr_user_id = Users.query.filter_by(id=current_user.id).first().id
     if title != '':
-        note = Notes(user_id=curr_user_id, title=title, detail_text=details)
+        note = Notes(user_id=current_user.id, title=title, detail_text=details)
         db.session.add(note)
         db.session.flush()
         db.session.commit()
@@ -132,16 +130,14 @@ def add_note():
 @app.route('/notes/<note_id>', methods=['GET'])
 @login_required
 def note_detail(note_id):
-    curr_user_id = Users.query.filter_by(id=current_user.id).first().id
-    note = Notes.query.filter_by(user_id=curr_user_id, id=note_id).first()
+    note = Notes.query.filter_by(user_id=current_user.id, id=note_id).first()
     return render_template('details.html', note=note)
 
 
 @app.route('/delete_note/<note_id>', methods=['GET'])
 @login_required
 def delete_note(note_id):
-    curr_user_id = Users.query.filter_by(id=current_user.id).first().id
-    Notes.query.filter_by(user_id=curr_user_id, id=note_id).delete()
+    Notes.query.filter_by(user_id=current_user.id, id=note_id).delete()
     db.session.flush()
     db.session.commit()
     return redirect(url_for('notes'))
@@ -152,9 +148,8 @@ def delete_note(note_id):
 def edit_note(note_id):
     title = request.form['title']
     details = request.form['details']
-    curr_user_id = Users.query.filter_by(id=current_user.id).first().id
     if title != '':
-        Notes.query.filter_by(user_id=curr_user_id, id=note_id).update(
+        Notes.query.filter_by(user_id=current_user.id, id=note_id).update(
             {'title': title, 'detail_text': details, 'date_upd': datetime.utcnow()})
         db.session.flush()
         db.session.commit()
