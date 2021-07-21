@@ -111,7 +111,7 @@ def secret():
 @login_required
 def notes():
     curr_user_id = Users.query.filter_by(id=current_user.id).first().id
-    curr_user_notes = Notes.query.filter_by(user_id=curr_user_id).all()
+    curr_user_notes = Notes.query.filter_by(user_id=curr_user_id).order_by(Notes.date_creat.desc()).all()
     return render_template('notes.html', notes=curr_user_notes)
 
 
