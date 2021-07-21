@@ -2,21 +2,21 @@
 
 {% block content %}
     <h1>Note details</h1>
-    <ul>
-        <li>Title: {{ note.title }}</li>
-        <li>Created: {{ note.date_creat }}</li>
-        <li>Updated: {{ note.date_upd }}</li>
-        <li>Text: {{ note.detail_text | urlize | linebreaksbr}}</li>
+    <ul class="list-group">
+        <li class="list-group-item"><b>{{ note.title }}</b></li>
+        <li class="list-group-item">{{ note.date_creat }}</li>
+        <li class="list-group-item">{{ note.date_upd }}</li>
+        <li class="list-group-item"><p>{{ note.detail_text | urlize | linebreaksbr}}</p></li>
     </ul>
 
-    <button onclick="document.getElementById('edit_form').style='display: block;'; document.getElementById('edit_bt').style='display: none;'" id="edit_bt">Edit</button>
+    <br>
 
+    <button class="btn btn-primary" onclick="document.getElementById('edit_form').style='display: block;'; document.getElementById('edit_bt').style='display: none;'; document.getElementById('delete_bt').style='display: none;'" id="edit_bt">Edit</button>
+    <button class="btn btn-primary" onclick="if (confirm('Are you sure?')){location.href=`{{ url_for('delete_note', note_id=note.id) }}`}" id="delete_bt">Delete</button>
     <form id="edit_form" style="display: none" action="{{ url_for('edit_note', note_id=note.id) }}" method="POST">
-        <input type="text" placeholder="Title" name="title" value="{{ note.title }}"> <br>
-        <textarea name="details" id="" cols="30" rows="10" placeholder="Details" >{{ note.detail_text }}</textarea> <br>
-        <input type="submit">
-        <button type="button" onclick="document.getElementById('edit_form').style='display: none;'; document.getElementById('edit_bt').style='display: block;'">Сancel</button>
+        <input class="form-control" type="text" placeholder="Title" name="title" value="{{ note.title }}"> <br>
+        <textarea class="form-control" name="details" id="" cols="30" rows="10" placeholder="Details" >{{ note.detail_text }}</textarea> <br>
+        <input class="btn btn-primary" type="submit" value="Save">
+        <button class="btn btn-primary" type="button" onclick="document.getElementById('edit_form').style='display: none;'; document.getElementById('edit_bt').style='display: inline;'; document.getElementById('delete_bt').style='display: inline;'">Сancel</button>
     </form>
-
-    <button onclick="if (confirm('Are you sure?')){location.href=`{{ url_for('delete_note', note_id=note.id) }}`}">Delete</button>
 {% endblock %}

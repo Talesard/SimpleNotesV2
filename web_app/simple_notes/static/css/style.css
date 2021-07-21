@@ -1,3 +1,8 @@
+p {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
 .page-header {
     text-align: center;
 }
@@ -10,4 +15,3 @@
     left: 50%;
     margin: -125px 0 0 -125px;
 }
-
