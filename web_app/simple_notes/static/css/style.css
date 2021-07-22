@@ -30,3 +30,8 @@ p {
 .left-offset {
     margin-left: 5px;
 }
+
+.main-sign {
+    font-family: Aladin, serif;
+    text-decoration: none;
+}
