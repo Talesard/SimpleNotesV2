@@ -10,4 +10,6 @@ app.config['SECRET_KEY'] = 'the random string'
 login_manager = LoginManager(app)
 db = SQLAlchemy(app)
 db.create_all()
+
+from simple_notes.helpers import linebreaks, linebreaksbr
 from simple_notes import models, routes

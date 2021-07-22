@@ -1,0 +1,1 @@
+venv\Scripts\activate && quick_config.bat && flask run --host=0.0.0.0

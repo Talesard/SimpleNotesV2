@@ -1,37 +1,11 @@
-import re
 from datetime import datetime
 
-from flask import request, redirect, url_for, render_template
+from flask import request, redirect, url_for, render_template, flash
 from flask_login import login_user, login_required, logout_user, current_user
-from jinja2 import evalcontextfilter, Markup
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from simple_notes import app, db, login_manager
 from simple_notes.models import Users, Notes
-
-
-@app.template_filter()
-@evalcontextfilter
-def linebreaks(_eval_ctx, value):
-    # https://gist.github.com/cemk/1324543
-    """Converts newlines into <p> and <br />s."""
-    value = re.sub(r'\r\n|\r|\n', '\n', value)  # normalize newlines
-    paras = re.split('\n{2,}', value)
-    paras = [u'<p>%s</p>' % p.replace('\n', '<br />') for p in paras]
-    paras = u'\n\n'.join(paras)
-    return Markup(paras)
-
-
-@app.template_filter()
-@evalcontextfilter
-def linebreaksbr(_eval_ctx, value):
-    # https://gist.github.com/cemk/1324543
-    """Converts newlines into <p> and <br />s."""
-    value = re.sub(r'\r\n|\r|\n', '\n', value)  # normalize newlines
-    paras = re.split('\n{2,}', value)
-    paras = [u'%s' % p.replace('\n', '<br/>') for p in paras]
-    paras = u'\n\n'.join(paras)
-    return Markup(paras)
 
 
 @login_manager.unauthorized_handler
@@ -50,7 +24,7 @@ def load_user(user_id):
 def register():
     if current_user.is_authenticated:
         print(current_user)
-        return redirect(url_for('index'))
+        return redirect(url_for('notes'))
     if request.method == 'POST':
         email = request.form['email']
         username = request.form['username']
@@ -64,17 +38,19 @@ def register():
                 db.session.add(user)
                 db.session.flush()
                 db.session.commit()
+                flash('User was created. Please sign in.', category='ok')
                 return redirect(url_for('login'))
             except Exception as e:
                 db.session.rollback()
                 print(e)
+                flash('Error in the registration form', category='err')
     return render_template('register.html')
 
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('notes'))
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -84,7 +60,8 @@ def login():
             login_user(user)
             return redirect(url_for('notes'))
         else:
-            print('pizda')
+            print('fail login')
+            flash('Password and login do not match', category='err')
             pass
     return render_template('login.html')
 
@@ -94,17 +71,6 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('notes'))
-
-
-@app.route('/home', methods=['GET'])
-def index():
-    return render_template('index.html')
-
-
-@app.route('/secret', methods=['GET'])
-@login_required
-def secret():
-    return render_template('secret.html')
 
 
 @app.route('/', methods=['GET'])

@@ -3,6 +3,10 @@
 {% block content %}
 
 <form action="{{ url_for('login') }}" method="POST"  class="block-login" >
+<h3 style="text-align: center">Sign in</h3>
+    {% for cat, msg in get_flashed_messages(True) %}
+    <div class="flash-{{ cat }}">{{msg}}</div>
+    {% endfor %}
     <div class="form-group">
         <label for="username-input">Username</label>
         <input type="text" name="username" class="form-control" id="username-input" placeholder="Username">
