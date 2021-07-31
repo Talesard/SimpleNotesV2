@@ -54,10 +54,11 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        remember_me = True if request.form.get("remember-me") else False
 
         user = Users.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
-            login_user(user, remember=True)
+            login_user(user, remember=remember_me)
             return redirect(url_for('notes'))
         else:
             print('fail login')
