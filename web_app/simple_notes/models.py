@@ -4,6 +4,7 @@ from flask_login import UserMixin
 
 from simple_notes import db
 
+# test commit
 
 class Users(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
