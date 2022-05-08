@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Users</h1>
+    <br>
+    <div class="list-group">
+        {% if users is not none %}
+            {% for user in users %}
+                <a href="{{ url_for('admin_user', username=user.username) }}" class="list-group-item list-group-item-action">
+
+                    <b>{{ user.username }}</b>
+                    <br>
+                    <small>{{ moment(user.date_reg).format('LLL') }}</small>
+                </a>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+{% endblock %}

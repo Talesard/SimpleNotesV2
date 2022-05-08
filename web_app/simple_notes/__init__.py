@@ -7,6 +7,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///notes.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'the random string'
+app.config['ADMIN_USERNAMES'] = ["admin"]
 
 login_manager = LoginManager(app)
 db = SQLAlchemy(app)

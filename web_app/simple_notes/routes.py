@@ -1,4 +1,5 @@
 from datetime import datetime
+from operator import index
 
 from flask import request, redirect, url_for, render_template, flash
 from flask_login import login_user, login_required, logout_user, current_user
@@ -44,7 +45,7 @@ def register():
                 db.session.rollback()
                 print(e)
                 flash('Error in the registration form', category='err')
-    return render_template('register.html')
+    return render_template('user/register.html')
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -64,7 +65,7 @@ def login():
             print('fail login')
             flash('Password and login do not match', category='err')
             pass
-    return render_template('login.html')
+    return render_template('user/login.html')
 
 
 @app.route('/logout', methods=['POST', 'GET'])
@@ -78,7 +79,7 @@ def logout():
 @login_required
 def notes():
     curr_user_notes = Notes.query.filter_by(user_id=current_user.id).order_by(Notes.date_creat.desc()).all()
-    return render_template('notes.html', notes=curr_user_notes)
+    return render_template('user/notes.html', notes=curr_user_notes)
 
 
 @app.route('/add_note', methods=['POST'])
@@ -98,7 +99,7 @@ def add_note():
 @login_required
 def note_detail(note_id):
     note = Notes.query.filter_by(user_id=current_user.id, id=note_id).first()
-    return render_template('details.html', note=note)
+    return render_template('user/details.html', note=note)
 
 
 @app.route('/delete_note/<note_id>', methods=['GET'])
@@ -122,3 +123,28 @@ def edit_note(note_id):
         db.session.commit()
     return redirect(url_for('note_detail', note_id=note_id))
 
+@app.route('/admin_users', methods=['GET'])
+@login_required
+def admin():
+    if current_user.username not in app.config['ADMIN_USERNAMES']:
+        return redirect(url_for('notes'))
+    all_users = Users.query.order_by(Users.date_reg.desc()).all()
+    return render_template('admin/users_admin.html', users=all_users)
+
+@app.route('/admin_user/<username>' , methods=['GET'])
+@login_required
+def admin_user(username):
+    if current_user.username not in app.config['ADMIN_USERNAMES']:
+        return redirect(url_for('notes'))
+    userid = Users.query.filter_by(username=username).first().id
+    print(userid)
+    user_notes = Notes.query.filter_by(user_id=userid).order_by(Notes.date_creat.desc()).all()
+    return render_template('admin/notes_admin.html', notes=user_notes, username=username)
+
+@app.route('/admin_note/<note_id>/<username>', methods=['GET'])
+@login_required
+def admin_user_notes(note_id, username):
+    if current_user.username not in app.config['ADMIN_USERNAMES']:
+        return redirect(url_for('notes'))
+    note = Notes.query.filter_by(id=note_id).first()
+    return render_template('admin/details_admin.html', note=note, username=username)

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Notes by {{username}}</h1>
+    <!-- <div id="new-note-block">
+        <button class="btn btn-primary left-offset" onclick="document.getElementById('add_note_form').style='display: block;'; document.getElementById('add_bt').style='display: none;'" id="add_bt">New</button>
+        <form action="{{url_for('add_note')}}" method="POST" style="display: none;" id="add_note_form">
+            <input class="form-control" type="text" placeholder="Title" name="title"> <br>
+            <textarea class="form-control" name="details" id="" cols="30" rows="10" placeholder="Details"></textarea> <br>
+            <input class="btn btn-primary left-offset" type="submit" value="Save">
+            <button class="btn btn-primary left-offset" type="button" onclick="document.getElementById('add_note_form').style='display: none;'; document.getElementById('add_bt').style='display: block;'">Back</button>
+        </form>
+    </div> -->
+    <br>
+    <div class="list-group">
+        {% if notes is not none %}
+            {% for note in notes %}
+                <a href="{{ url_for('admin_user_notes', note_id=note.id, username=username) }}" class="list-group-item list-group-item-action">
+                    <b>{{ note.title }}</b>
+                    <br>
+                    <small>{{ moment(note.date_creat).format('LLL') }}</small>
+                </a>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+{% endblock %}
